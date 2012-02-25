@@ -25,7 +25,7 @@ function manage_routes() {
 
             // PRODUCT DETAILS
             var u = $.mobile.path.parseUrl(data.toPage),
-				re = /^#product_details=/;
+                re = /^#product_details=/;
             if (u.hash.search(re) !== -1) {
                 show_product(u, data.options);
                 e.preventDefault();
@@ -37,6 +37,13 @@ function manage_routes() {
                 show_search(u, data.options);
                 e.preventDefault();
             }
+
+            // SEARCH DETAILS
+            re = /^#search_details=/;
+            if (u.hash.search(re) !== -1) {
+                show_product_search(u, data.options);
+                e.preventDefault();
+            }
         }
     });
 }
@@ -44,7 +51,9 @@ function manage_routes() {
 function show_search(u, options) {
     $("#product_search_search_form").submit(function () {
         var search_term = $("#product_search_search_term").val();
-        if (search_term) lcbo_api_handoff(search_term);
+        if (search_term) {
+            jQuery.getJSON("http://lcboapi.com/products?q=" + encodeURIComponent(search_term) + "&callback=?", display_lcbo_search_results);
+        }
     });
 
     var pageSelector = "#product_search";
@@ -68,40 +77,47 @@ function map_lcbo_api_product_to_our_product(result) {
     product.region = result.origin;
     product.price = (result.regular_price_in_cents / 100).toString();
     product.rating = "N/A";
-    product.description = result.tasting_note + " " + result.serving_suggestion;
+    product.description = result.tasting_note + " <p>Serving suggestion: " + result.serving_suggestion + "</p>";
     return product;
 }
 
 function display_lcbo_search_results(search_results) {
-    
     if (search_results && search_results.pager !== undefined && search_results.pager.current_page_record_count > 0) {
-        
+        window.winesnob.results = search_results;
         for (var idx in search_results.result) {
             var result = search_results.result[idx];
             var product = map_lcbo_api_product_to_our_product(result);
-            $("#search_results_listview").append(render_listing_li(product, idx)).listview("refresh");
+            $("#search_results_listview").append(render_listing_li(product, idx, "search")).listview("refresh");
         }
     }
-    
-    
 }
-function lcbo_api_handoff(search_term) {
-    var success = function (data) {
-        alert(data);
-    };
-    var url = "http://lcboapi.com/products?q=" + encodeURIComponent(search_term);
-    jQuery.support.cors = true;
-    $.ajax({
-        url: url,
-        success: display_lcbo_search_results,
-        crossDomain: true
-    });
+
+function show_product_search(urlObj, options) {
+    var idx = urlObj.hash.replace(/.*search_details=/, ""),
+        product = map_lcbo_api_product_to_our_product(window.winesnob.results.result[idx]),
+        pageSelector = "#search_details";
+
+
+    if (product) {
+        var $page = $(pageSelector),
+	        $header = $page.children(":jqmData(role=header)"),
+			$content = $page.children(":jqmData(role=content)"),
+			markup = get_product_description_content(product);
+
+        $header.find("h1").html(product.name);
+        $content.html(markup);
+        $page.page();
+        options.dataUrl = urlObj.href;
+
+        $.mobile.changePage($page, options);
+    }
 }
 
 function show_product(urlObj, options) {
-    var idx = urlObj.hash.replace( /.*product_details=/ , ""),
+    var idx = urlObj.hash.replace(/.*product_details=/, ""),
         product = window.winesnob.listings[idx],
         pageSelector = "#product_details";
+    
 
 	if (product) {
 	    var $page = $(pageSelector),
@@ -135,27 +151,22 @@ function get_product_image_url(image) {
 function render_listings_main(listings) {
 	for (var idx in listings) {
 		var listing = listings[idx];
-		$("#listings_listview").append(render_listing_li(listing, idx)).listview("refresh");
+		$("#listings_listview").append(render_listing_li(listing, idx, "listing")).listview("refresh");
 	}
 }
 
 function render_listing_li(listing, idx, type) {
-    if ( type ) {
-
-    } else {
-        type = "listing";
-    }
-    
     var rendered = "<li data-theme=\"c\" class=\"ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-hover-c ui-btn-up-c\">";
 	rendered += "<div class=\"ui-btn-inner ui-li\">";
 	rendered += "<div class=\"ui-btn-text\">";
-    if ( type=="listing") rendered += "<a href='#product_details=" + idx + "' class=\"ui-link-inherit\"  >";
+	if (type == "listing") rendered += "<a href='#product_details=" + idx + "' class=\"ui-link-inherit\"  >";
+	if (type == "search") rendered += "<a href='#search_details=" + idx + "' class=\"ui-link-inherit\"  >";
 	rendered += "<img src=\"" + get_product_image_url(listing.image_thumb_url) + "\" class=\"ui-li-thumb\">";
 	rendered += "<h3 class=\"ui-li-heading\" >" + listing.name + "</h3>"; // 
 	rendered += "<p class=\"ui-li-desc\">$" + listing.price + " | rating: " + listing.rating + " | " + listing.region + " | " + listing.category + "</p>";
 	rendered += "</a>";
 	rendered += "</div>";
-    if ( type=="listing") rendered += "<span class=\"ui-icon ui-icon-arrow-r ui-icon-shadow\"></span>";
+    rendered += "<span class=\"ui-icon ui-icon-arrow-r ui-icon-shadow\"></span>";
 	rendered += "</div>";
 	rendered += "</li>";
 	return rendered;

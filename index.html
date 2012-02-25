@@ -33,12 +33,12 @@
 
             <div data-role="content">
             </div><!-- /content -->
-            <p><a href="#reviews_list" data-role="button">Back to reviews</a></p>	
+            <p><a href="#reviews_list" data-role="button">Back to listings</a></p>	
             <div data-role="footer">
                 <h4>&nbsp;</h4>
             </div><!-- /footer -->
         </div><!-- /page --> 
-        <!-- add listing -->
+        <!-- search -->
         <div data-role="page" id="product_search">
 
             <div data-role="header">
@@ -46,16 +46,29 @@
             </div><!-- /header -->
 
             <div data-role="content">
-                <form id="product_search_search_form">
+                <form action="#product_search" method="GET" id="product_search_search_form">
                     <label for="product_search_search_button">What are you looking for?</label>
                     <input type="search" name="product" id="product_search_search_term"/>
-                    <input type="submit" id="product_search_search_button" />
+                    <input type="button" id="product_search_search_button" />
                 </form>
                 <ul data-role="listview" data-inset="true"  id="search_results_listview">
                 </ul>
-                <p><a href="#reviews_list" data-role="button">Back to reviews</a></p>	
+                <p><a href="#reviews_list" data-role="button">Back to listings</a></p>	
             </div><!-- /content -->
 
+            <div data-role="footer">
+                <h4>&nbsp;</h4>
+            </div><!-- /footer -->
+        </div><!-- /page -->
+        <div data-role="page" id="search_details">
+
+            <div data-role="header">
+                <h1>Product Details</h1>
+            </div><!-- /header -->
+
+            <div data-role="content">
+            </div><!-- /content -->
+            <p><a href="#reviews_list" data-role="button">Back to listings</a></p>	
             <div data-role="footer">
                 <h4>&nbsp;</h4>
             </div><!-- /footer -->
