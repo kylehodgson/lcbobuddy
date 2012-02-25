@@ -8,34 +8,57 @@
          <script src="jscript/main.js" type="text/javascript"></script>
 		<title></title>
    </head>
-	<body>
-		<div data-role="page" id="reviews_list" >
+    <body>
+        <!-- main listsings page -->
+        <div data-role="page" id="reviews_list" >
 
-			<div data-role="header">
-				<h1>LCBO Buddy</h1>
-			</div><!-- /header -->
+            <div data-role="header">
+                <h1>LCBO Buddy</h1>
+            </div><!-- /header -->
 
-		    <div data-role="content">
-		        <ul data-role="listview" data-inset="true" data-filter="true" id="listings_listview">
-		        </ul>
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" data-filter="true" id="listings_listview">
+                </ul>
                 <div data-role="productdetails" data-theme="c"></div>
-		    </div><!-- /content -->
+                <p><a href="#product_search" data-role="button">Product Search</a></p>
+            </div><!-- /content -->
 
-		</div><!-- /page -->
-		<!-- Start of second page -->
+        </div><!-- /page -->
+        <!-- detail page -->
         <div data-role="page" id="product_details">
 
-	        <div data-role="header">
-		        <h1>Bar</h1>
-	        </div><!-- /header -->
+            <div data-role="header">
+                <h1>Product Details</h1>
+            </div><!-- /header -->
 
-	        <div data-role="content">
-		        <p><a href="#reviews_list">Back to reviews</a></p>	
-	        </div><!-- /content -->
+            <div data-role="content">
+            </div><!-- /content -->
+            <p><a href="#reviews_list" data-role="button">Back to reviews</a></p>	
+            <div data-role="footer">
+                <h4>&nbsp;</h4>
+            </div><!-- /footer -->
+        </div><!-- /page --> 
+        <!-- add listing -->
+        <div data-role="page" id="product_search">
 
-	        <div data-role="footer">
-		        <h4>&nbsp;</h4>
-	        </div><!-- /footer -->
+            <div data-role="header">
+                <h1>Add Product</h1>
+            </div><!-- /header -->
+
+            <div data-role="content">
+                <form id="product_search_search_form">
+                    <label for="product_search_search_button">What are you looking for?</label>
+                    <input type="search" name="product" id="product_search_search_term"/>
+                    <input type="submit" id="product_search_search_button" />
+                </form>
+                <ul data-role="listview" data-inset="true"  id="search_results_listview">
+                </ul>
+                <p><a href="#reviews_list" data-role="button">Back to reviews</a></p>	
+            </div><!-- /content -->
+
+            <div data-role="footer">
+                <h4>&nbsp;</h4>
+            </div><!-- /footer -->
         </div><!-- /page -->
-	</body>
+    </body>
 </html>
