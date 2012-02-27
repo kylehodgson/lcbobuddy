@@ -21,20 +21,22 @@
                 </ul>
                 <div data-role="productdetails" data-theme="c"></div>
             </div><!-- /content -->
-            <div><a href="#product_search_page" data-role="button" >Product Search</a></div>
+            <div><a href="#page_product_search" data-role="button" >Product Search</a></div>
             
             <div data-role="footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
-                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->
 
         </div><!-- /page -->
+
         <!-- detail page -->
-        <div data-role="page" id="product_details_page">
+        <div data-role="page" id="page_product_details">
 
             <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
@@ -42,27 +44,28 @@
 
             <div data-role="content">
             </div><!-- /content -->
-            <div><a href="#page_reviews_list" data-role="button" data-icon="arrow-l">Back to Suggestions</a></div>
+            <div><a href="#page_reviews_list" data-role="button" data-icon="arrow-l">Back</a></div>
 
             <div data-role="footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
-                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->
 
         </div><!-- /page --> 
         <!-- search -->
-        <div data-role="page" id="product_search_page">
+        <div data-role="page" id="page_product_search">
 
             <div data-role="header" data-position="fixed">
                 <h1>Add Product</h1>
             </div><!-- /header -->
 
             <div data-role="content">
-                <form action="#product_search_page" method="GET" id="product_search_search_form">
+                <form action="#page_product_search" method="GET" id="product_search_search_form">
                     <label for="product_search_search_term">What are you looking for?</label>
                     <input type="search" name="product" id="product_search_search_term"/>
                     <input type="submit" name="go" value="Search" id="product_search_search_button" />
@@ -74,8 +77,9 @@
             <div data-role="footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
-                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->
@@ -89,13 +93,38 @@
 
             <div data-role="content">
             </div><!-- /content -->
-            <div><a href="#product_search_page" data-role="button" data-icon="arrow-l">Back to Search</a></div>
+            <div><a href="#page_product_search" data-role="button" data-icon="arrow-l">Back to Search</a></div>
 
             <div data-role="footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
-                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+        
+        <!-- cart page -->
+        <div data-role="page" id="page_cart" >
+
+            <div data-role="header" data-position="fixed">
+                <h1>LCBO Buddy</h1>
+            </div><!-- /header -->
+
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" id="cart_listview">
+                </ul>
+            </div><!-- /content -->
+            
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->

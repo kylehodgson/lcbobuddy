@@ -25,14 +25,14 @@ function manage_routes() {
 
             // PRODUCT DETAILS
             var u = $.mobile.path.parseUrl(data.toPage),
-                re = /^#product_details_page=/;
+                re = /^#page_product_details=/;
             if (u.hash.search(re) !== -1) {
                 show_product_page(u, data.options);
                 e.preventDefault();
             }
 
             // PRODUCT SEARCH
-            re = /^#product_search_page/;
+            re = /^#page_product_search/;
             if (u.hash.search(re) !== -1) {
                 show_search_page(u, data.options);
                 e.preventDefault();
@@ -44,8 +44,45 @@ function manage_routes() {
                 show_search_results_page(u, data.options);
                 e.preventDefault();
             }
+
+            // VIEW CART
+            re = /^#page_cart/;
+            if (u.hash.search(re) !== -1) {
+                show_cart_page(u, data.options);
+                e.preventDefault();
+            }
         }
     });
+}
+
+function show_cart_page(u, options) {
+    if ( u.hash.indexOf("?") != -1) {
+        var pArray = u.hash.split("?")[1].split("&"); 
+        var idx = pArray[0].split("=")[1],
+            type = pArray[1].split("=")[1],
+            product = Object();
+    
+        if ( type=="search") {
+            product = map_lcbo_api_product_to_our_product(window.winesnob.results.result[idx]);
+        } else if (type=="listing") {
+            product = window.winesnob.listings[idx];
+        }
+        
+        if (product != Object()) {
+            add_product_to_cart(product);
+        }
+    }
+    var pageSelector = "#page_cart";
+    
+    var $page = $(pageSelector),
+        $content = $page.children(":jqmData(role=content)");
+    
+    $content.html(get_cart_content());
+    $page.page();
+    options.dataUrl = u.href;
+
+    $.mobile.changePage($page, options);
+    
 }
 
 function show_search_page(u, options) {
@@ -56,7 +93,7 @@ function show_search_page(u, options) {
         }
     });
 
-    var pageSelector = "#product_search_page";
+    var pageSelector = "#page_product_search";
     var $page = $(pageSelector),
                     $header = $page.children(":jqmData(role=header)");
 
@@ -69,16 +106,17 @@ function show_search_page(u, options) {
 
 
 function show_product_page(urlObj, options) {
-    var idx = urlObj.hash.replace(/.*product_details_page=/, ""),
+    var idx = urlObj.hash.replace(/.*page_product_details=/, ""),
         product = window.winesnob.listings[idx],
-        pageSelector = "#product_details_page";
+        pageSelector = "#page_product_details";
 
 
     if (product) {
         var $page = $(pageSelector),
-	        $header = $page.children(":jqmData(role=header)"),
-			$content = $page.children(":jqmData(role=content)"),
-			markup = get_product_description_content(product);
+            $header = $page.children(":jqmData(role=header)"),
+            $content = $page.children(":jqmData(role=content)");
+        var markup = get_product_description_content(product);
+        markup += get_add_to_cart_button(idx, "listing");
 
         $header.find("h1").html(product.name);
         $content.html(markup);
@@ -97,9 +135,10 @@ function show_search_results_page(urlObj, options) {
 
     if (product) {
         var $page = $(pageSelector),
-	        $header = $page.children(":jqmData(role=header)"),
-			$content = $page.children(":jqmData(role=content)"),
-			markup = get_product_description_content(product);
+            $header = $page.children(":jqmData(role=header)"),
+            $content = $page.children(":jqmData(role=content)");
+        var markup = get_product_description_content(product);
+        markup += get_add_to_cart_button(idx, "search");
 
         $header.find("h1").html(product.name);
         $content.html(markup);
@@ -137,6 +176,16 @@ function display_lcbo_search_results_callback(search_results) {
     }
 }
 
+function get_cart_content() {
+    var markup = "";
+    var cart = get_products_from_cart();
+    for ( var idx in cart) {
+        var product = cart[idx];
+        markup += get_listing_content(product,idx,"cart");
+    }
+    return markup;
+}
+
 function get_product_description_content(product) {
     var markup = "<div data-role=\"content\">";
     markup += "<h2>" + product.name + "</h2>";
@@ -145,8 +194,16 @@ function get_product_description_content(product) {
     markup += "<p>region:<br /><strong>" + product.region + "</strong></p>";
     markup += "<p>price:<br /><strong>$" + product.price + "</strong></p>";
     markup += "<p>category:<br /><strong>" + product.category + "</strong></p>";
-    markup += "<p>" + product.description + "</p></div></div>";
+    markup += "<p>" + product.description + "</p>";
+    markup += "</div>";
     return markup;
+}
+
+function get_add_to_cart_button(idx, type) {
+    //if (typeof idx != "number") return "";
+    if (type != "search" && type != "listing") return "";
+    
+    return "<a href='#page_cart?index=" + idx + "&type=" + type + "' data-role='button' data-icon='plus'>Add to my list</a>";
 }
 
 function get_product_thumbnail_url(image) {
@@ -161,10 +218,10 @@ function get_listing_content(listing, idx, type) {
     var rendered = "<li data-theme=\"c\" class=\"ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-hover-c ui-btn-up-c\">";
 	rendered += "<div class=\"ui-btn-inner ui-li\">";
 	rendered += "<div class=\"ui-btn-text\">";
-	if (type == "listing") rendered += "<a href='#product_details_page=" + idx + "' class=\"ui-link-inherit\"  >";
+	if (type == "listing" || type == "cart") rendered += "<a href='#page_product_details=" + idx + "' class=\"ui-link-inherit\"  >";
 	if (type == "search") rendered += "<a href='#page_search_details=" + idx + "' class=\"ui-link-inherit\"  >";
 	rendered += "<img src=\"" + get_product_thumbnail_url(listing.image_thumb_url) + "\" class=\"ui-li-thumb\">";
-	rendered += "<h3 class=\"ui-li-heading\" >" + listing.name + "</h3>"; // 
+	rendered += "<h3 class=\"ui-li-heading\" >" + listing.name + "</h3>"; 
 	rendered += "<p class=\"ui-li-desc\">$" + listing.price + " | rating: " + listing.rating + " | " + listing.region + " | " + listing.category + "</p>";
 	rendered += "</a>";
 	rendered += "</div>";
@@ -191,4 +248,11 @@ function get_product_from_cart(idx) {
         return window.winesnob.cart[idx];
     }
     return Object();
+}
+
+function get_products_from_cart() {
+    if (window.winesnob.cart === undefined) {
+        window.winesnob.cart = Array();
+    }
+    return window.winesnob.cart;
 }
