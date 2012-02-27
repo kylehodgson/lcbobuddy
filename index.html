@@ -10,9 +10,9 @@
    </head>
     <body>
         <!-- main listsings page -->
-        <div data-role="page" id="reviews_list" >
+        <div data-role="page" id="page_reviews_list" >
 
-            <div data-role="header">
+            <div data-role="header" data-position="fixed">
                 <h1>LCBO Buddy</h1>
             </div><!-- /header -->
 
@@ -20,58 +20,86 @@
                 <ul data-role="listview" data-inset="true" data-filter="true" id="listings_listview">
                 </ul>
                 <div data-role="productdetails" data-theme="c"></div>
-                <p><a href="#product_search" data-role="button">Product Search</a></p>
             </div><!-- /content -->
+            <div><a href="#product_search_page" data-role="button" >Product Search</a></div>
+            
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
+                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
 
         </div><!-- /page -->
         <!-- detail page -->
-        <div data-role="page" id="product_details">
+        <div data-role="page" id="product_details_page">
 
-            <div data-role="header">
+            <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
             </div><!-- /header -->
 
             <div data-role="content">
             </div><!-- /content -->
-            <p><a href="#reviews_list" data-role="button">Back to listings</a></p>	
-            <div data-role="footer">
-                <h4>&nbsp;</h4>
+            <div><a href="#page_reviews_list" data-role="button" data-icon="arrow-l">Back to Suggestions</a></div>
+
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
+                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                    </ul>
+                </div><!-- /navbar -->
             </div><!-- /footer -->
+
         </div><!-- /page --> 
         <!-- search -->
-        <div data-role="page" id="product_search">
+        <div data-role="page" id="product_search_page">
 
-            <div data-role="header">
+            <div data-role="header" data-position="fixed">
                 <h1>Add Product</h1>
             </div><!-- /header -->
 
             <div data-role="content">
-                <form action="#product_search" method="GET" id="product_search_search_form">
+                <form action="#product_search_page" method="GET" id="product_search_search_form">
                     <label for="product_search_search_term">What are you looking for?</label>
                     <input type="search" name="product" id="product_search_search_term"/>
-                    <input type="submit" id="product_search_search_button" />
+                    <input type="submit" name="go" value="Search" id="product_search_search_button" />
                 </form>
                 <ul data-role="listview" data-inset="true"  id="search_results_listview">
                 </ul>
-                <p><a href="#reviews_list" data-role="button">Back to listings</a></p>	
             </div><!-- /content -->
 
-            <div data-role="footer">
-                <h4>&nbsp;</h4>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
+                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                    </ul>
+                </div><!-- /navbar -->
             </div><!-- /footer -->
-        </div><!-- /page -->
-        <div data-role="page" id="search_details">
 
-            <div data-role="header">
+        </div><!-- /page -->
+        <div data-role="page" id="page_search_details">
+
+            <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
             </div><!-- /header -->
 
             <div data-role="content">
             </div><!-- /content -->
-            <p><a href="#product_search" data-role="button">Back to search</a></p>	
-            <div data-role="footer">
-                <h4>&nbsp;</h4>
+            <div><a href="#product_search_page" data-role="button" data-icon="arrow-l">Back to Search</a></div>
+
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" >Suggestions</a></li>
+                        <li><a href="#product_search_page" data-role="button" >Search</a></li>
+                    </ul>
+                </div><!-- /navbar -->
             </div><!-- /footer -->
+
         </div><!-- /page -->
     </body>
 </html>
