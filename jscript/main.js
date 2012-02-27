@@ -122,6 +122,7 @@ function show_cart_details_page(urlObj, options) {
     if (product) {
         var $page = $(pageSelector),
             $header = $page.children(":jqmData(role=header)"),
+            $footer = $page.children(":jqmData(role=footer)"),
             $content = $page.children(":jqmData(role=content)");
         var markup = get_product_description_content(product);
 
