@@ -2,7 +2,7 @@
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();	
         jQuery.getJSON(
-			"http://www.lcbobuddy.com/data/listings.json",
+			"data/listings.json?callback",
 			function (data) {
 			    window.winesnob = new Object();
 			    window.winesnob.listings = data;
