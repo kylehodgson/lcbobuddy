@@ -1,13 +1,15 @@
 ﻿$(document).ready(function () {
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
+        $.mobile.showPageLoadingMsg();	
         jQuery.getJSON(
-			"data/listings.json",
+			"http://www.lcbobuddy.com/data/listings.json",
 			function (data) {
 			    window.winesnob = new Object();
 			    window.winesnob.listings = data;
 			    for (var idx in window.winesnob.listings) {
 			        var listing = window.winesnob.listings[idx];
 			        $("#listings_listview").append(get_listing_content(listing, idx, "listing")).listview("refresh");
+			        $.mobile.hidePageLoadingMsg();
 			    }
 			});
     }
@@ -96,7 +98,7 @@ function show_search_page(u, options) {
     $("#product_search_search_form").submit(function () {
         var search_term = $("#product_search_search_term").val();
         if (search_term) {
-            $.mobile.showPageLoadingMsg();	
+            $.mobile.showPageLoadingMsg();
             jQuery.getJSON("http://lcboapi.com/products?q=" + encodeURIComponent(search_term) + "&callback=?", display_lcbo_search_results_callback);
         }
     });
