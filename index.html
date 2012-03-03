@@ -1,32 +1,35 @@
 ﻿<!doctype html public >
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-      <meta name="viewport" content="width=device-width, initial-scale=1"> 
-         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-         <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-         <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" /> 
+        <link rel="stylesheet" href="styles/themes/lcbobuddy.min.css" />
+	    <!--	    <link rel="stylesheet" href="libs/jquery.mobile.structure-1.0.1.css" />
+	        <script src="libs/jquery-1.7.1.js" type="text/javascript"></script>
+	        <script src="libs/jquery.mobile-1.0.1.min.js"  type="text/javascript"></script>-->
+            <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+            <script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
+            <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js" type="text/javascript"></script>
          <script src="jscript/main.js" type="text/javascript"></script>
-		<title></title>
+		<title>LCBO Buddy</title>
    </head>
-    <body>
+    <body class="ui-mobile-viewport">
         <!-- main listsings page -->
-        <div data-role="page" id="page_reviews_list" >
+        <div data-role="page" id="page_reviews_list" tabindex="0"  data-theme="a">
 
-            <div data-role="header" data-position="fixed">
+            <div data-role="header" data-position="fixed" role="banner" style="">
                 <h1>LCBO Buddy</h1>
             </div><!-- /header -->
 
-            <div data-role="content">
+            <div data-role="content" role="main">
                 <ul data-role="listview" data-inset="true" data-filter="true" id="listings_listview">
                 </ul>
-                <div data-role="productdetails" data-theme="c"></div>
+                <div data-role="productdetails"></div>
             </div><!-- /content -->
-            <div><a href="#page_product_search" data-role="button" >Product Search</a></div>
             
-            <div data-role="footer" data-position="fixed">
-                <div data-role="navbar">
+            <div data-role="footer" data-position="fixed" data-id="main-footer" role="contentinfo" style="">
+                <div data-role="navbar"  role="navigation">
                     <ul>
-                        <li><a  href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_reviews_list" class="ui-btn-active ui-state-persist"  data-role="button" data-icon="home">Home</a></li>
                         <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
                         <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
@@ -36,7 +39,7 @@
         </div><!-- /page -->
 
         <!-- detail page -->
-        <div data-role="page" id="page_product_details">
+        <div data-role="page" id="page_product_details" data-theme="a">
 
             <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
@@ -46,10 +49,10 @@
             </div><!-- /content -->
             <div><a href="#page_reviews_list" data-role="button" data-icon="arrow-l">Back</a></div>
 
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer" data-id="main-footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_reviews_list" class="ui-btn-active ui-state-persist"  data-role="button" data-icon="home">Home</a></li>
                         <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
                         <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
@@ -59,7 +62,7 @@
         </div><!-- /page --> 
 
         <!-- search page -->
-        <div data-role="page" id="page_product_search">
+        <div data-role="page" id="page_product_search" data-theme="a">
 
             <div data-role="header" data-position="fixed">
                 <h1>Add Product</h1>
@@ -75,11 +78,11 @@
                 </ul>
             </div><!-- /content -->
 
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer"  data-id="main-footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
-                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_product_search" class="ui-btn-active ui-state-persist"  data-role="button" data-icon="search">Search</a></li>
                         <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
@@ -88,7 +91,7 @@
         </div><!-- /page -->
 
         <!-- search details -->
-        <div data-role="page" id="page_search_details">
+        <div data-role="page" id="page_search_details" data-theme="a">
 
             <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
@@ -98,11 +101,11 @@
             </div><!-- /content -->
             <div><a href="#page_product_search" data-role="button" data-icon="arrow-l">Back to Search</a></div>
 
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer"  data-id="main-footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
-                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_product_search" class="ui-btn-active ui-state-persist"  data-role="button" data-icon="search">Search</a></li>
                         <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
@@ -111,7 +114,7 @@
         </div><!-- /page -->
         
         <!-- cart details -->
-        <div data-role="page" id="page_details_cart">
+        <div data-role="page" id="page_details_cart" data-theme="a">
 
             <div data-role="header" data-position="fixed">
                 <h1>Product Details</h1>
@@ -119,14 +122,14 @@
 
             <div data-role="content">
             </div><!-- /content -->
-            <div><a href="#page_cart" data-role="button" data-icon="arrow-l">Back to Cart</a></div>
+            <div><a href="#page_cart" data-role="button" data-icon="arrow-l">Back</a></div>
 
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer"  data-id="main-footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
                         <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
-                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
+                        <li><a href="#page_cart" data-role="button" class="ui-btn-active ui-state-persist"  data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->
@@ -134,7 +137,7 @@
         </div><!-- /page -->
 
         <!-- cart page -->
-        <div data-role="page" id="page_cart" >
+        <div data-role="page" id="page_cart" data-theme="a">
 
             <div data-role="header" data-position="fixed">
                 <h1>My List</h1>
@@ -145,12 +148,12 @@
                 </ul>
             </div><!-- /content -->
             
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer" data-id="main-footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
                         <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
-                        <li><a href="#page_cart" data-role="button" data-icon="search">My List</a></li>
+                        <li><a href="#page_cart" data-role="button" class="ui-btn-active ui-state-persist" data-icon="search">My List</a></li>
                     </ul>
                 </div><!-- /navbar -->
             </div><!-- /footer -->
