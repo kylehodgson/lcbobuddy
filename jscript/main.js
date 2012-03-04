@@ -171,8 +171,6 @@ function show_search_results_page(urlObj, options) {
         product = map_lcbo_api_product_to_our_product(window.winesnob.results.result[idx]),
         pageSelector = "#page_search_details";
 
-
-
     if (product) {
         var $page = $(pageSelector),
             $header = $page.children(":jqmData(role=header)"),
@@ -323,13 +321,14 @@ function geoLocateErrorFunction() {
 
 function pimp_my_app() {
     var ua = navigator.userAgent.toLowerCase();
-    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-
+    var isAndroid = ua.indexOf("chrome") > -1; //&& ua.indexOf("mobile");
+    var isWebSite = document.URL.toLowerCase().indexOf("lcbobuddy") > -1;
+    
     $("#info_box").click(function () {
         $("#info_box").html("");
     });
     
-    if (isAndroid) {
+    if (isAndroid && isWebSite) {
         $("#info_box").html(
             $(info_box("Android user?", 
                     "Android users can download our app! Click here to get started: <a data-role='button' href='https://build.phonegap.com/apps/74129/download/android' >Install Now</a>"
