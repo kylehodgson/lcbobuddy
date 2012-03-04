@@ -39,6 +39,7 @@
 
    </head>
     <body class="ui-mobile-viewport">
+        
         <!-- main listsings page -->
         <div data-role="page" id="page_reviews_list" tabindex="0"  data-theme="a">
 
@@ -47,6 +48,7 @@
             </div><!-- /header -->
 
             <div data-role="content" role="main">
+                <div id="info_box"></div>
                 <ul data-role="listview" data-inset="true" data-filter="true" id="listings_listview">
                 </ul>
                 <div data-role="productdetails"></div>
@@ -97,7 +99,7 @@
             <div data-role="content">
                 <form action="#page_product_search" method="GET" id="product_search_search_form">
                     <label for="product_search_search_term">What are you looking for?</label>
-                    <input type="search" name="product" id="product_search_search_term"/>
+                    <input type="search" name="product" id="product_search_search_term" />
                     <input type="submit" name="go" value="Search" id="product_search_search_button" />
                 </form>
                 <ul data-role="listview" data-inset="true"  id="search_results_listview">

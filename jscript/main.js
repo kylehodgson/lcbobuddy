@@ -2,11 +2,11 @@
 
     //Check if browser supports W3C Geolocation API
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+        navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction, geoLocateErrorFunction);
     }
-    
+    pimp_my_app();
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
-        $.mobile.showPageLoadingMsg();	
+        $.mobile.showPageLoadingMsg();
         jQuery.getJSON(
 			"data/listings.json?callback",
 			function (data) {
@@ -18,9 +18,9 @@
 			        $.mobile.hidePageLoadingMsg();
 			    }
 			});
-    
-}
-    
+
+    }
+
     manage_routes();
 });
 
@@ -125,7 +125,7 @@ function show_search_page(u, options) {
 
 function show_cart_details_page(urlObj, options) {
     var idx = urlObj.hash.replace(/.*page_details_cart=/, ""),
-        product = window.winesnob.cart[idx],
+        product = get_product_from_cart(idx),  // get_product_from_cart // window.winesnob.cart[idx]
         pageSelector = "#page_details_cart";
 
 
@@ -310,13 +310,44 @@ function get_products_from_cart() {
     return window.winesnob.cart;
 }
 
-function successFunction(position) {
+function geoLocateSuccessFunction(position) {
     if ( window.winesnob.lat === undefined) {
         window.winesnob.lat = position.coords.latitude;
         window.winesnob.lon = position.coords.longitude;
     } 
 }
 
-function errorFunction() {
-    alert("Geocoder failed");
+function geoLocateErrorFunction() {
+    //alert("Geocoder failed");
+}
+
+function pimp_my_app() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
+    $("#info_box").click(function () {
+        $("#info_box").html("");
+    });
+    
+    if (isAndroid) {
+        $("#info_box").html(
+            $(info_box("Android user?", 
+                    "Android users can download our app! Click here to get started: <a data-role='button' href='https://build.phonegap.com/apps/74129/download/android' >Install Now</a>"
+            )));
+    }
+}
+
+function info_box(title,message) {
+
+    var markup = "<div class='ui-bar ui-bar-e'>";
+    markup += "<h3 style='float:left; margin-top:8px;'>" + title + " </h3>";
+    markup += "<div style='float:right; margin-top:4px;'>";
+    markup += "<a href='#' id='info_box_dismiss' data-role='button' data-icon='delete' data-iconpos='notext' data-corners='true' ";
+    markup += "data-shadow='true' data-iconshadow='true' data-inline='false' data-wrapperels='span' title='Button' ";
+    markup += "class='ui-btn ui-btn-up-e ui-btn-icon-notext ui-btn-corner-all ui-shadow'><span class='ui-btn-inner ui-btn-corner-all ui-corner-top ui-corner-bottom'>";
+    markup += "<span class='ui-btn-text'>Button</span><span class='ui-icon ui-icon-delete ui-icon-shadow'></span></span></a></div>";
+    markup += "<p style='clear:both; font-size:85%; margin-bottom:8px;'>" + message + "</p>";
+    markup += "</div>";
+
+    return markup;
 }
