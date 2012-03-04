@@ -5,6 +5,7 @@
         navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction, geoLocateErrorFunction);
     }
     pimp_my_app();
+    cart_init();
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();
         jQuery.getJSON(
@@ -86,7 +87,7 @@ function show_cart_page(u, options) {
         }
         
         if (product != Object()) {
-            add_product_to_cart(product);
+            cart_add_product(product);
         }
     }
     var pageSelector = "#page_cart";
@@ -125,7 +126,7 @@ function show_search_page(u, options) {
 
 function show_cart_details_page(urlObj, options) {
     var idx = urlObj.hash.replace(/.*page_details_cart=/, ""),
-        product = get_product_from_cart(idx),  // get_product_from_cart // window.winesnob.cart[idx]
+        product = cart_get_product_by_index(idx),  // get_product_from_cart // window.winesnob.cart[idx]
         pageSelector = "#page_details_cart";
 
 
@@ -219,7 +220,7 @@ function display_lcbo_search_results_callback(search_results) {
 
 function get_cart_content() {
     var markup = "";
-    var cart = get_products_from_cart();
+    var cart = cart_get_products();
     for ( var idx in cart) {
         var product = cart[idx];
         markup += get_listing_content(product,idx,"cart");
@@ -253,7 +254,8 @@ function get_product_thumbnail_url(image) {
     if (image) {
         return image;
     } else {
-        return "http://lcbo.ca/app/images/products/website/default.jpg";
+        //        return "http://lcbo.ca/app/images/products/website/default.jpg";
+        return "images/shim.png";
     }
 }
 
@@ -275,37 +277,69 @@ function get_listing_content(listing, idx, type) {
 	return rendered;
 }
 
-function add_product_to_cart(product) {
-    if (window.winesnob.cart === undefined) window.winesnob.cart = Array();
-    window.winesnob.cart.push(product);
-}
-
 function get_product_from_cart_by_lcboid(lcboid) {
-    var products = get_products_from_cart();
-    for ( var idx in products) {
-        var product = get_product_from_cart(idx);
+    var products = cart_get_products();
+    for (var idx in products) {
+        var product = cart_get_product_by_index(idx);
         if (product.id == lcboid) return product;
     }
     return Object();
 }
 
-function get_product_from_cart(idx) {
-    if (window.winesnob.cart === undefined) {
-        window.winesnob.cart = Array();
+function cart_init() {
+    if (localStorage == undefined) {
+        if (window.winesnob.cart === undefined) window.winesnob.cart = Array();
+    } else {
+        if (localStorage.getItem("cart") == null) {
+            var cart = Object();
+            cart.items = Array();
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    }
+}
+function cart_add_product(product) {
+    if ( localStorage == undefined ) {
+        if (window.winesnob.cart === undefined) window.winesnob.cart = Array();
+        window.winesnob.cart.push(product);
+    } else {
+        var cart = JSON.parse( localStorage.getItem("cart") );
+        cart.items.push(product);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+}
+
+function cart_get_product_by_index(idx) {
+    if ( localStorage == undefined) {
+        if (window.winesnob.cart === undefined) {
+            window.winesnob.cart = Array();
+            return Object();
+        }
+
+        if (window.winesnob.cart.length < idx) {
+            return window.winesnob.cart[idx];
+        }
+        return Object(); 
+    } else {
+        var cart = JSON.parse(localStorage.getItem("cart"));
+        if ( cart.items.length > idx) {
+            return cart.items[idx];
+        }
         return Object();
     }
 
-    if (window.winesnob.cart.length < idx) {
-        return window.winesnob.cart[idx];
-    }
-    return Object();
 }
 
-function get_products_from_cart() {
-    if (window.winesnob.cart === undefined) {
-        window.winesnob.cart = Array();
+function cart_get_products() {
+    if ( localStorage == undefined) {
+        if (window.winesnob.cart === undefined) {
+            window.winesnob.cart = Array();
+        }
+        return window.winesnob.cart;
+    } else {
+        var cart = JSON.parse(localStorage.getItem("cart"));
+        return cart.items;
     }
-    return window.winesnob.cart;
+
 }
 
 function geoLocateSuccessFunction(position) {
@@ -366,8 +400,9 @@ function pimp_my_app() {
             }
         }
     };
-
-    promotion.pimp();
+    
+    $(document).ready(promotion.pimp());
+    
 }
 
 function info_box(title,message) {
