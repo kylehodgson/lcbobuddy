@@ -18,6 +18,7 @@
 			        $.mobile.hidePageLoadingMsg();
 			    }
 			});
+    
 }
     
     manage_routes();
@@ -154,10 +155,10 @@ function show_product_page(urlObj, options) {
         var $page = $(pageSelector),
             $header = $page.children(":jqmData(role=header)"),
             $content = $page.children(":jqmData(role=content)");
-        var markup = get_product_description_content(product,  get_add_to_cart_button(idx, "listing"));
+        var $markup = $( get_product_description_content(product,  get_add_to_cart_button(idx, "listing")) );
 
         $header.find("h1").html(product.name);
-        $content.html(markup);
+        $content.html($markup).trigger('create');
         $page.page();
         options.dataUrl = urlObj.href;
 
@@ -177,10 +178,9 @@ function show_search_results_page(urlObj, options) {
             $header = $page.children(":jqmData(role=header)"),
             $content = $page.children(":jqmData(role=content)");
         
-        var markup = get_product_description_content(product);
-        markup += get_add_to_cart_button(idx, "search");
+        var $markup = $( get_product_description_content(product,get_add_to_cart_button(idx, "search")) );
         $header.find("h1").html(product.name);
-        $content.html(markup);
+        $content.html($markup).trigger('create');
 
         $page.page();
         options.dataUrl = urlObj.href;
@@ -233,7 +233,7 @@ function get_product_description_content(product, button) {
     var markup = "<div data-role=\"content\">";
     markup += "<h2>" + product.name + "</h2>";
     if (product.image_url) markup += "<img align='right' width='150' id='product-image' src='" + product.image_url + "'>";
-    markup += "<p>rating:<br /><strong>" + product.rating + "</strong></p>";
+    markup += "<p>rating:<br /><div class='badge'>" + product.rating + "</div></p>";
     markup += "<p>region:<br /><strong>" + product.region + "</strong></p>";
     markup += "<p>price:<br /><strong>$" + product.price + "</strong></p>";
     markup += "<p>category:<br /><strong>" + product.category + "</strong></p>";
@@ -247,7 +247,7 @@ function get_product_description_content(product, button) {
 function get_add_to_cart_button(idx, type) {
     if (type != "search" && type != "listing") return "";
 
-    var markup = "<div><a href='#page_cart?index=" + idx + "&type=" + type + "' data-role='button' data-icon='plus'>Add to my list</a></div>";
+    var markup = "<div><a id='button_add_to_cart' data-theme='c' href='#page_cart?index=" + idx + "&type=" + type + "' data-role='button' data-icon='plus'>Add to my list</a></div>";
     return markup;
 }
 
