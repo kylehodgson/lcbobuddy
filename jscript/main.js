@@ -320,20 +320,54 @@ function geoLocateErrorFunction() {
 }
 
 function pimp_my_app() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-    var isWebSite = document.URL.toLowerCase().indexOf("lcbobuddy") > -1;
+    var promotion = Object();
+    promotion.platforms = Array();
     
-    $("#info_box").click(function () {
-        $("#info_box").html("");
-    });
+    var bb = Object();
+    bb.name = "BlackBerry";
+    bb.app_url = "https://build.phonegap.com/apps/74129/download/blackberry";
+    bb.promotion_title = "BlackBerry user?";
+    bb.promotion_message = "BlackBerry users can download our app! Click here to get started: <a data-role='button' href='" + bb.app_url + "' >Install Now</a>";
+    bb.user_agent_pattern = "blackberry";
     
-    if (isAndroid && isWebSite) {
-        $("#info_box").html(
-            $(info_box("Android user?", 
-                    "Android users can download our app! Click here to get started: <a data-role='button' href='https://build.phonegap.com/apps/74129/download/android' >Install Now</a>"
-            )));
-    }
+    promotion.platforms.push(bb);
+    
+    var android = Object();
+    android.name = "Android";
+    android.app_url = "https://build.phonegap.com/apps/74129/download/android";
+    android.promotion_title = "Android user?";
+    android.promotion_message = "Android users can download our app! Click here to get started: <a data-role='button' href='" + android.app_url + "' >Install Now</a>";
+    android.user_agent_pattern = "android";
+
+    promotion.platforms.push(android);
+
+//    var chrome = Object();
+//    chrome.name = "Chrome";
+//    chrome.app_url = "https://build.phonegap.com/apps/74129/download/android";
+//    chrome.promotion_title = "Chrome user?";
+//    chrome.promotion_message = "Chrome users can download our app! Click here to get started: <a data-role='button' href='" + android.app_url + "' >Install Now</a>";
+//    chrome.user_agent_pattern = "chrome";
+
+//    promotion.platforms.push(chrome);
+    
+    promotion.pimp = function () {
+        var ua = navigator.userAgent.toLowerCase();
+        var is_our_website = document.URL.toLowerCase().indexOf("lcbobuddy") > -1;
+        for (var idx in this.platforms) {
+            if ( is_our_website) {
+                $("#info_box").click(function () {
+                    $("#info_box").html("");
+                });
+            }
+            var platform = promotion.platforms[idx];
+            var is_our_platform = ua.indexOf(platform.user_agent_pattern) > -1;
+            if (is_our_platform && is_our_website) {
+                $("#info_box").html($(info_box(platform.promotion_title, platform.promotion_message)));
+            }
+        }
+    };
+
+    promotion.pimp();
 }
 
 function info_box(title,message) {
