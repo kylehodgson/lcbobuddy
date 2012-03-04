@@ -321,7 +321,7 @@ function geoLocateErrorFunction() {
 
 function pimp_my_app() {
     var ua = navigator.userAgent.toLowerCase();
-    var isAndroid = ua.indexOf("chrome") > -1; //&& ua.indexOf("mobile");
+    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
     var isWebSite = document.URL.toLowerCase().indexOf("lcbobuddy") > -1;
     
     $("#info_box").click(function () {
