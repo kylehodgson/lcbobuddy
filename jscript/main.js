@@ -315,7 +315,7 @@ function cart_get_product_by_index(idx) {
             return Object();
         }
 
-        if (window.winesnob.cart.length < idx) {
+        if (window.winesnob.cart.length > idx) {
             return window.winesnob.cart[idx];
         }
         return Object(); 
