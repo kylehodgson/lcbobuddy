@@ -199,7 +199,7 @@ function map_lcbo_api_product_to_our_product(result) {
     product.category = result.secondary_category ? result.secondary_category : "";
     product.region = result.origin ? result.origin : "";
     product.price = (result.regular_price_in_cents / 100).toString();
-    product.rating = "N/A";
+    product.rating = "na";
     product.description = result.tasting_note ? result.tasting_note : "";
     product.description = result.serving_suggestion ? " <p><strong>Serving suggestion: " + result.serving_suggestion + "</strong></p>" : "";
     return product;
@@ -371,7 +371,7 @@ function pimp_my_app() {
     
     var android = Object();
     android.name = "Android";
-    android.app_url = "https://build.phonegap.com/apps/74129/download/android";
+    android.app_url = "http://www.lcbobuddy.com/packages/LCBOBuddy-debug.apk";
     android.promotion_title = "Android user?";
     android.promotion_message = "Android users can download our app! Click here to get started: <a data-role='button' href='" + android.app_url + "' >Install Now</a>";
     android.user_agent_pattern = "android";
