@@ -20,7 +20,8 @@
    <icon src="icons/wine-within-reach-72.png" width="72" height="72"/>
    <icon src="icons/wine-within-reach-114.png" width="114" height="114"/>
 
-   <gap:splash src="icons/splash.png"/>
+   <gap:splash src="icons/splash.png" width="480" height="320"/>
+   <gap:splash src="icons/splash-portrait.png" width="320" height="480"/>
    <gap:splash src="icons/splash-retina.png" width="640" height="960"/>
    <gap:splash src="icons/splash-ipad-portrait.png" width="768" height="1004"/>
    <gap:splash src="icons/splash-ipad-landscape.png" width="1024" height="748"/>
