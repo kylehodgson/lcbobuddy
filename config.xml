@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns		= "http://www.w3.org/ns/widgets"
+	xmlns:gap	= "http://phonegap.com/ns/1.0"
+	id		= "com.lcbobuddy.wineWithinReach"
+	version 	= "1.0">
+
+	<name>PhoneGap: Getting Started</name>
+
+	<description>
+		A template for getting started with PhoneGap development and build.phonegap.com
+	</description>
+
+	<author href="http://alunny.github.com"
+		email="andrew.lunny@nitobi.com">
+		Andrew Lunny
+	</author>
+
+	<icon src="icons/wine-within-reach.png" gap:role="default" />
+   <icon src="icons/wine-within-reach-57.png" width="57" height="57"/>
+   <icon src="icons/wine-within-reach-72.png" width="72" height="72"/>
+   <icon src="icons/wine-within-reach-114.png" width="114" height="114"/>
+
+	<feature name="http://api.phonegap.com/1.0/geolocation"/>
+	<feature name="http://api.phonegap.com/1.0/network"/>
+
+	<preference name="orientation" value="default" />
+   <preference name="phonegap-version" value="1.4.1" />
+</widget>

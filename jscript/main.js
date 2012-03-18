@@ -2,9 +2,9 @@
 
     //Check if browser supports W3C Geolocation API
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction, geoLocateErrorFunction);
+        //navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction, geoLocateErrorFunction);
     }
-    pimp_my_app();
+    //pimp_my_app();
     cart_init();
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();
