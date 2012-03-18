@@ -6,10 +6,11 @@
     }
     //pimp_my_app();
     cart_init();
+
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();
         var listingsHandler = jQuery.getJSON(
-			"http://www.lcbobuddy.com/listings.php?callback", handle_listings);
+        "http://www.lcbobuddy.com/listings.php?callback=?", handle_listings);
         listingsHandler.error(get_local_data);
     }
 
@@ -18,19 +19,32 @@
 
 function manage_routes() {
 
+    //page_reviews_list
+    
 	// Listen for any attempts to call changePage().
+
     $(document).bind("pagebeforechange", function (e, data) {
 
         // We only want to handle changePage() calls where the caller is
         // asking us to load a page by URL.
         if (typeof data.toPage === "string") {
 
+            // REVIEWS
+            var u = $.mobile.path.parseUrl(data.toPage),
+                re = /^#page_reviews_list/;
+            if (u.hash.search(re) !== -1) {
+                show_reviews_page(u, data.options);
+                e.preventDefault();
+                return;
+            }
+            
             // PRODUCT DETAILS
             var u = $.mobile.path.parseUrl(data.toPage),
                 re = /^#page_product_details=/;
             if (u.hash.search(re) !== -1) {
                 show_product_page(u, data.options);
                 e.preventDefault();
+                return;
             }
 
             // PRODUCT SEARCH
@@ -38,6 +52,7 @@ function manage_routes() {
             if (u.hash.search(re) !== -1) {
                 show_search_page(u, data.options);
                 e.preventDefault();
+                return;
             }
 
             // SEARCH DETAILS
@@ -45,6 +60,7 @@ function manage_routes() {
             if (u.hash.search(re) !== -1) {
                 show_search_results_page(u, data.options);
                 e.preventDefault();
+                return;
             }
 
             // VIEW CART
@@ -52,6 +68,7 @@ function manage_routes() {
             if (u.hash.search(re) !== -1) {
                 show_cart_details_page(u, data.options);
                 e.preventDefault();
+                return;
             }
 
             // VIEW CART
@@ -59,9 +76,29 @@ function manage_routes() {
             if (u.hash.search(re) !== -1) {
                 show_cart_page(u, data.options);
                 e.preventDefault();
+                return;
             }
         }
     });
+}
+
+function show_reviews_page (u, options) {
+    if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
+        $.mobile.showPageLoadingMsg();
+        var listingsHandler = jQuery.getJSON(
+        "http://www.lcbobuddy.com/listings.php?callback=?", handle_listings);
+        listingsHandler.error(get_local_data);
+    }
+
+    var pageSelector = "#page_reviews_list";
+    var $page = $(pageSelector),
+                    $header = $page.children(":jqmData(role=header)");
+
+    $header.find("h1").html("Wine Within Reach");
+    $page.page();
+    options.dataUrl = u.href;
+
+    $.mobile.changePage($page, options);
 }
 
 function show_cart_page(u, options) {
@@ -208,6 +245,7 @@ function display_lcbo_search_results_callback(search_results) {
     $("#search_results_listview_button").hide();
     if (search_results && search_results.pager !== undefined && search_results.pager.current_page_record_count > 0) {
         window.winesnob.results = search_results;
+        alert("set search results. item count: " + window.winesnob.results.result.length);
         for (var idx in search_results.result) {
             var result = search_results.result[idx];
             var product = map_lcbo_api_product_to_our_product(result);
@@ -216,11 +254,12 @@ function display_lcbo_search_results_callback(search_results) {
         if (search_results && search_results.pager && search_results.pager.next_page_path) {
             $("#search_results_listview_button").show();
             $("#search_results_listview_button").click(function () {
-                alert("clicks yo");
                 $.mobile.showPageLoadingMsg();
+                var urlString = "http://lcboapi.com" + search_results.pager.next_page_path;
                 jQuery.getJSON(
-                        "http://lcboapi.com" + search_results.pager.next_page_path,
+                        urlString,
                         display_lcbo_search_results_callback);
+                return false;
             });
         }
         
@@ -450,5 +489,5 @@ function handle_listings(data) {
 
 function get_local_data() {
     jQuery.getJSON(
-			"data/listings.json?callback", handle_listings);
+			"data/listings.json", handle_listings);
 }
