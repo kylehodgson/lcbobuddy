@@ -297,7 +297,8 @@ function get_product_description_content(product, button) {
     //markup += "<p>Product Page: <a target='_new' href='http://www.lcbo.com/lcbo-ear/lcbo/product/details.do?language=EN&itemNumber=" + product.id + "'>LCBO #" + product.id + "</a></p>";
     markup += "<p>" + product.description + "</p>";
     if ( product.byline != undefined && product.byline != "") {
-        markup += "<p><p><a target='_new' href='" + product.byline_link + "'>" + product.byline + "</a></p>";
+        //markup += "<p><a target='_new' href='" + product.byline_link + "'>" + product.byline + "</a></p>";
+        markup += "<p>" + product.byline + "</p>";
     } 
     if (button !== undefined) markup += button;
     markup += "</div>";
