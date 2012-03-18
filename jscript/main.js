@@ -9,6 +9,8 @@
 
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();
+        window.winesnob = Object();
+        window.winesnob.more_button_drawn = false;
         var listingsHandler = jQuery.getJSON(
         "http://www.lcbobuddy.com/listings.php?callback=?", handle_listings);
         listingsHandler.error(get_local_data);
@@ -132,7 +134,7 @@ function show_cart_page(u, options) {
 }
 
 function show_search_page(u, options) {
-    
+
     $("#product_search_search_form").submit(function () {
         var search_term = $("#product_search_search_term").val();
         if (window.winesnob.current_search_term == undefined) window.winesnob.current_search_term = "";
@@ -142,6 +144,7 @@ function show_search_page(u, options) {
         }
         if (search_term) {
             $.mobile.showPageLoadingMsg();
+            window.winesnob.more_button_drawn = false;
             jQuery.getJSON("http://lcboapi.com/products?q=" + encodeURIComponent(search_term) + "&callback=?", display_lcbo_search_results_callback);
         }
     });
@@ -152,7 +155,6 @@ function show_search_page(u, options) {
 
     $header.find("h1").html("Search Results");
     $page.page();
-    $("#search_results_listview_button").hide();
     options.dataUrl = u.href;
 
     $.mobile.changePage($page, options);
@@ -242,36 +244,38 @@ function map_lcbo_api_product_to_our_product(result) {
 
 function display_lcbo_search_results_callback(search_results) {
     $.mobile.hidePageLoadingMsg();
-    $("#search_results_listview_button").hide();
     if (search_results && search_results.pager !== undefined && search_results.pager.current_page_record_count > 0) {
         window.winesnob.results = search_results;
-        alert("set search results. item count: " + window.winesnob.results.result.length);
         for (var idx in search_results.result) {
             var result = search_results.result[idx];
             var product = map_lcbo_api_product_to_our_product(result);
             $("#search_results_listview").append(get_listing_content(product, idx, "search"));
         }
-        if (search_results && search_results.pager && search_results.pager.next_page_path) {
-            $("#search_results_listview_button").show();
-            $("#search_results_listview_button").click(function () {
-                $.mobile.showPageLoadingMsg();
-                var urlString = "http://lcboapi.com" + search_results.pager.next_page_path;
-                jQuery.getJSON(
-                        urlString,
-                        display_lcbo_search_results_callback);
-                return false;
-            });
+        
+        if (search_results && search_results.pager && search_results.pager.next_page_path && window.winesnob.more_button_drawn==false) {
+            draw_more_button();
         }
         
     }
 }
 
-function get_next_button(path) {
-    var markup = "";
-    markup += "<a data-theme='c' data-role='button' data-icon='arrow-d' href='" + path + "' >More</a>";
-    return markup;
-}
+function draw_more_button() {
+    
+    //<a id="search_results_listview_button" href="#" data-theme='c' data-role='button' data-icon='arrow-d'>More</a>
+    $("#more_button").html("<a id='search_results_listview_button' href='#' data-theme='c' data-role='button' data-icon='arrow-d'>More</a>");
 
+    $("#search_results_listview_button").bind("click", function (event, ui) {
+        window.winesnob.more_button_drawn = true;
+        $.mobile.showPageLoadingMsg();
+        var urlString = "http://lcboapi.com/products?q=" + window.winesnob.current_search_term + "&page=" + window.winesnob.results.pager.next_page + "&callback=?";
+        jQuery.getJSON(
+                        urlString,
+                        display_lcbo_search_results_callback);
+        return false;
+    });
+
+    $("#search_results_listview_button").button();
+}
 function get_cart_content() {
     var markup = "";
     var cart = cart_get_products();
@@ -290,7 +294,7 @@ function get_product_description_content(product, button) {
     markup += "<p>region:<br /><strong>" + product.region + "</strong></p>";
     markup += "<p>price:<br /><strong>$" + product.price + "</strong></p>";
     markup += "<p>category:<br /><strong>" + product.category + "</strong></p>";
-    markup += "<p>Product Page: <a target='_new' href=\"http://www.lcbo.com/lcbo-ear/lcbo/product/details.do?language=EN&itemNumber=" + product.id + "\">LCBO " + product.id + "</a></p>";
+    markup += "<p>Product Page: <a target='_new' href='http://www.lcbo.com/lcbo-ear/lcbo/product/details.do?language=EN&itemNumber=" + product.id + "'>LCBO #" + product.id + "</a></p>";
     markup += "<p>" + product.description + "</p>";
     if ( product.byline != undefined && product.byline != "") {
         markup += "<p><p><a target='_new' href='" + product.byline_link + "'>" + product.byline + "</a></p>";
@@ -478,7 +482,6 @@ function info_box(title,message) {
 }
 
 function handle_listings(data) {
-    window.winesnob = new Object();
     window.winesnob.listings = data;
     for (var idx in window.winesnob.listings) {
         var listing = window.winesnob.listings[idx];
