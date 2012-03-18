@@ -8,18 +8,9 @@
     cart_init();
     if (typeof window.winesnob === "undefined" || typeof window.winesnob.listings === "undefined") {
         $.mobile.showPageLoadingMsg();
-        jQuery.getJSON(
-			"data/listings.json?callback",
-			function (data) {
-			    window.winesnob = new Object();
-			    window.winesnob.listings = data;
-			    for (var idx in window.winesnob.listings) {
-			        var listing = window.winesnob.listings[idx];
-			        $("#listings_listview").append(get_listing_content(listing, idx, "listing")).listview("refresh");
-			        $.mobile.hidePageLoadingMsg();
-			    }
-			});
-
+        var listingsHandler = jQuery.getJSON(
+			"http://www.lcbobuddy.com/listings.php?callback", handle_listings);
+        listingsHandler.error(get_local_data);
     }
 
     manage_routes();
@@ -104,8 +95,14 @@ function show_cart_page(u, options) {
 }
 
 function show_search_page(u, options) {
+    
     $("#product_search_search_form").submit(function () {
         var search_term = $("#product_search_search_term").val();
+        if (window.winesnob.current_search_term == undefined) window.winesnob.current_search_term = "";
+        if (window.winesnob.current_search_term != search_term) {
+            window.winesnob.current_search_term = search_term;
+            $("#search_results_listview").html("");
+        }
         if (search_term) {
             $.mobile.showPageLoadingMsg();
             jQuery.getJSON("http://lcboapi.com/products?q=" + encodeURIComponent(search_term) + "&callback=?", display_lcbo_search_results_callback);
@@ -118,6 +115,7 @@ function show_search_page(u, options) {
 
     $header.find("h1").html("Search Results");
     $page.page();
+    $("#search_results_listview_button").hide();
     options.dataUrl = u.href;
 
     $.mobile.changePage($page, options);
@@ -206,16 +204,33 @@ function map_lcbo_api_product_to_our_product(result) {
 }
 
 function display_lcbo_search_results_callback(search_results) {
-    $.mobile.hidePageLoadingMsg();	
+    $.mobile.hidePageLoadingMsg();
+    $("#search_results_listview_button").hide();
     if (search_results && search_results.pager !== undefined && search_results.pager.current_page_record_count > 0) {
-        $("#search_results_listview").html("");
         window.winesnob.results = search_results;
         for (var idx in search_results.result) {
             var result = search_results.result[idx];
             var product = map_lcbo_api_product_to_our_product(result);
-            $("#search_results_listview").append(get_listing_content(product, idx, "search")).listview("refresh");
+            $("#search_results_listview").append(get_listing_content(product, idx, "search"));
         }
+        if (search_results && search_results.pager && search_results.pager.next_page_path) {
+            $("#search_results_listview_button").show();
+            $("#search_results_listview_button").click(function () {
+                alert("clicks yo");
+                $.mobile.showPageLoadingMsg();
+                jQuery.getJSON(
+                        "http://lcboapi.com" + search_results.pager.next_page_path,
+                        display_lcbo_search_results_callback);
+            });
+        }
+        
     }
+}
+
+function get_next_button(path) {
+    var markup = "";
+    markup += "<a data-theme='c' data-role='button' data-icon='arrow-d' href='" + path + "' >More</a>";
+    return markup;
 }
 
 function get_cart_content() {
@@ -231,7 +246,7 @@ function get_cart_content() {
 function get_product_description_content(product, button) {
     var markup = "<div data-role=\"content\">";
     markup += "<h2>" + product.name + "</h2>";
-    if (product.image_url) markup += "<img align='right' width='150' id='product-image' src='" + product.image_url + "'>";
+    if (product.image_thumb_url) markup += "<img align='right' width='150' id='product-image' src='" + product.image_url + "'>";
     markup += "<p>rating:<br /><div class='badge'>" + product.rating + "</div></p>";
     markup += "<p>region:<br /><strong>" + product.region + "</strong></p>";
     markup += "<p>price:<br /><strong>$" + product.price + "</strong></p>";
@@ -346,7 +361,7 @@ function cart_get_products() {
 }
 
 function geoLocateSuccessFunction(position) {
-    if ( window.winesnob.lat === undefined) {
+    if ( window.winesnob !== undefined && window.winesnob.lat == undefined) {
         window.winesnob.lat = position.coords.latitude;
         window.winesnob.lon = position.coords.longitude;
     } 
@@ -421,4 +436,19 @@ function info_box(title,message) {
     markup += "</div>";
 
     return markup;
+}
+
+function handle_listings(data) {
+    window.winesnob = new Object();
+    window.winesnob.listings = data;
+    for (var idx in window.winesnob.listings) {
+        var listing = window.winesnob.listings[idx];
+        $("#listings_listview").append(get_listing_content(listing, idx, "listing"));//.listview("refresh");
+        $.mobile.hidePageLoadingMsg();
+    }
+}
+
+function get_local_data() {
+    jQuery.getJSON(
+			"data/listings.json?callback", handle_listings);
 }
