@@ -4,15 +4,15 @@
 	id		= "com.lcbobuddy.wineWithinReach"
 	version 	= "1.0">
 
-	<name>PhoneGap: Getting Started</name>
+	<name>Wine Within Reach</name>
 
 	<description>
-		A template for getting started with PhoneGap development and build.phonegap.com
+		Great for wine lovers on a budget, especially in Ontario, this app helps you find bottles that are reasonably priced in the LCBO.  We include reviews from several Toronto reviewers and let you search to find whatever you might like. Once you decide what you want, add them to your list! You can still wander aimlessly in the LCBO if you want, but you don't have to with Wine Within Reach!
 	</description>
 
-	<author href="http://alunny.github.com"
-		email="andrew.lunny@nitobi.com">
-		Andrew Lunny
+	<author href="http://paymentnetworks.wordpress.com"
+		email="kyle.hodgson@gmail.com">
+		Kyle Hodgson
 	</author>
 
 	<icon src="icons/wine-within-reach.png" gap:role="default" />
