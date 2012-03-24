@@ -1,9 +1,5 @@
 ﻿$(document).ready(function () {
 
-    //Check if browser supports W3C Geolocation API
-    if (navigator.geolocation) {
-        //navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction, geoLocateErrorFunction);
-    }
     //pimp_my_app();
     cart_init();
 
@@ -12,8 +8,14 @@
         window.winesnob = Object();
         window.winesnob.results = Array();
         window.winesnob.more_button_drawn = false;
-        var listingsHandler = jQuery.getJSON(
-        "http://www.lcbobuddy.com/listings.php?callback=?", handle_listings);
+        
+        //Check if browser supports W3C Geolocation API
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction);
+        }
+        
+        // Go get listings
+        var listingsHandler = jQuery.getJSON("http://www.lcbobuddy.com/listings.php?callback=?", handle_listings);
         listingsHandler.error(get_local_data);
     }
 
@@ -185,7 +187,6 @@ function show_cart_details_page(urlObj, options) {
         $(document).ready(function () {
             $("#button_remove_from_cart").click(function () {
                 cart_remove_product(product.id);
-                show_cart_page();
             });
         });
         
@@ -388,9 +389,9 @@ function cart_init() {
             window.winesnob.cart = cart;
         }
     } else {
-        //if (localStorage.getItem("cart") == null) {
+        if (localStorage.getItem("cart") == null) {
             localStorage.setItem("cart", JSON.stringify(cart));
-        //}
+        }
     }
 }
 function cart_add_product(product) {
@@ -470,16 +471,88 @@ function cart_get_products() {
 }
 
 function geoLocateSuccessFunction(position) {
-    if ( window.winesnob !== undefined && window.winesnob.lat == undefined) {
+    window.winesnob.geo = true;
+    if (window.winesnob !== undefined && (window.winesnob.lat == undefined || window.winesnob.lon == undefined)) {
         window.winesnob.lat = position.coords.latitude;
         window.winesnob.lon = position.coords.longitude;
     } 
 }
 
 function geoLocateErrorFunction() {
-    //alert("Geocoder failed");
+    window.winesnob.geo = false;
 }
 
+function get_stores_with_product(id) {
+    if (!window.winesnob.geo) return;
+
+    var url = 'http://www.lcboapi.com/products/' + id + '/stores?lat=' + window.winesnob.lat + '&lon=' + window.winesnob.lon + '&order=distance_in_meters.asc&callback=?';
+
+    jQuery.getJSON(url, get_stores_callback);
+
+}
+function msmTo24time(msm) {
+    var hour = msm / 60;
+    var mins = msm % 60;
+    return [hour, mins];
+}
+function msmTo12time(msm) {
+    var time = msmTo24time(msm),
+      h24 = time[0],
+      h12 = (0 == h24 ? 12 : (h24 > 12 ? (h24 - 10) - 2 : h24)),
+      ampm = (h24 >= 12 ? 'PM' : 'AM');
+    return [h12, time[1], ampm];
+}
+
+function get_stores_callback(data) {
+    // product. lcbo api product object.
+    // result. array of : 
+    //    address_line_1: "2762 Lakeshore Boulevard West"
+    //    address_line_2: null
+    //    city: "Toronto-Etobicoke"
+    //    distance_in_meters: 2955
+    //    fax: "(416) 251-4236"
+    //    friday_close: 1260
+    //    friday_open: 600
+    //    has_beer_cold_room: false
+    //    has_bilingual_services: false
+    //    has_parking: true
+    //    has_product_consultant: false
+    //    has_special_occasion_permits: true
+    //    has_tasting_bar: true
+    //    has_transit_access: true
+    //    has_vintages_corner: false
+    //    has_wheelchair_accessability: true
+    //    id: 20
+    //    inventory_count: 53943
+    //    inventory_price_in_cents: 59629844
+    //    inventory_volume_in_milliliters: 40557784
+    //    is_dead: false
+    //    latitude: 43.6024
+    //    longitude: -79.4991
+    //    monday_close: 1260
+    //    monday_open: 600
+    //    name: "Lakeshore & Islington"
+    //    postal_code: "M8V1H1"
+    //    products_count: 3467
+    //    quantity: 15
+    //    saturday_close: 1260
+    //    saturday_open: 600
+    //    store_no: 20
+    //    sunday_close: 1080
+    //    sunday_open: 1440
+    //    tags: "lakeshore islington 2762 boulevard west toronto etobicoke toronto-etobicoke torontoetobicoke m8v 1h1"
+    //    telephone: "(416) 251-2021"
+    //    thursday_close: 1260
+    //    thursday_open: 600
+    //    tuesday_close: 1260
+    //    tuesday_open: 600
+    //    updated_at: "2012-03-24T08:20:40+00:00"
+    //    updated_on: "2012-03-22"
+    //    wednesday_close: 1260
+    //    wednesday_open: 600
+    var thing = data.product;
+    thing.label = 'hello';
+}
 function pimp_my_app() {
     var promotion = Object();
     promotion.platforms = Array();

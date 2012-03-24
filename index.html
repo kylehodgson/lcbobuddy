@@ -163,9 +163,8 @@
             <div data-role="content">
             </div><!-- /content -->
         <div>
-            <a id="button_remove_from_cart" data-role="button" data-icon="delete">Delete From My List</a>
+            <a href="#page_cart" id="button_remove_from_cart" data-role="button" data-icon="delete">Delete From My List</a>
             <a href="#page_cart" data-role="button" data-icon="arrow-l">Back</a>
-
         </div>
 
             <div data-role="footer"  data-id="main-footer" data-position="fixed">
@@ -189,6 +188,30 @@
 
             <div data-role="content">
                 <ul data-role="listview" data-inset="true" id="cart_listview">
+                </ul>
+            </div><!-- /content -->
+            
+            <div data-role="footer" data-id="main-footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page_reviews_list" data-role="button" data-icon="home">Home</a></li>
+                        <li><a href="#page_product_search" data-role="button" data-icon="search">Search</a></li>
+                        <li><a href="#page_cart" data-role="button" class="ui-btn-active ui-state-persist" data-icon="search">My List</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+        
+        <!-- stores page -->
+        <div data-role="page" id="page_stores" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>Nearby Stores</h1>
+            </div><!-- /header -->
+
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" id="stores_listview">
                 </ul>
             </div><!-- /content -->
             
