@@ -66,7 +66,7 @@ function manage_routes() {
                 return;
             }
 
-            // VIEW CART
+            // VIEW CART ITEM
             re = /^#page_details_cart/;
             if (u.hash.search(re) !== -1) {
                 show_cart_details_page(u, data.options);
@@ -180,6 +180,9 @@ function show_cart_details_page(urlObj, options) {
         options.dataUrl = urlObj.href;
 
         $.mobile.changePage($page, options);
+        $(document).ready(function () {
+            $("#button_remove_from_cart").click(cart_remove_product(product.id));
+        });
     }
 }
 
