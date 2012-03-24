@@ -388,6 +388,33 @@ function cart_add_product(product) {
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 }
+function cart_remove_product(id) {
+
+    if (localStorage == undefined) {
+        if (window.winesnob.cart === undefined) {
+            window.winesnob.cart = Array();
+            return;
+        }
+    }
+    
+    var newProducts = Array();
+    var oldProducts = cart_get_products();
+    
+    for (var idx in oldProducts) {
+        var product = cart_get_product_by_index(idx);
+        if (id != product.id) {
+            newProducts.push(product);
+        }
+    }
+
+    if (localStorage == undefined) {
+        window.winesnob.cart = newProducts;
+    } else {
+        localStorage.setItem("cart", JSON.stringify(newProducts));
+    }
+
+}
+
 
 function cart_get_product_by_index(idx) {
     if ( localStorage == undefined) {
