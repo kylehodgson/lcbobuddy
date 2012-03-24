@@ -11,7 +11,7 @@
         
         //Check if browser supports W3C Geolocation API
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction);
+            //navigator.geolocation.getCurrentPosition(geoLocateSuccessFunction);
         }
         
         // Go get listings
@@ -406,8 +406,15 @@ function cart_add_product(product) {
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 }
-function cart_remove_product(id) {
 
+function isNumber(n) {
+    // thanks Christian C. Salvadó  ... 
+    // http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric 
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function cart_remove_product(id) {
+    if (!isNumber(id)) return;
     if (localStorage == undefined) {
         if (window.winesnob.cart === undefined) {
             cart_init();
