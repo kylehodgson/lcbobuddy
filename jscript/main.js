@@ -276,7 +276,7 @@ function display_lcbo_search_results_callback(search_results) {
 function draw_more_button(next_page) {
     
     //<a id="search_results_listview_button" href="#" data-theme='c' data-role='button' data-icon='arrow-d'>More</a>
-    $("#more_button").html("<a id='search_results_listview_button' href='#' data-theme='c' data-role='button' data-icon='arrow-d'>More</a>");
+    $("#more_button").html("<a id='search_results_listview_button' href='#' data-theme='c' data-role='button' data-transition='slide' data-icon='arrow-d'>More</a>");
 
     $("#search_results_listview_button").bind("click", function () {
         window.winesnob.more_button_drawn = true;
@@ -322,7 +322,7 @@ function get_product_description_content(product, button) {
 function get_add_to_cart_button(lcboid, type) {
     if (type != "search" && type != "listing") return "";
 
-    var markup = "<div><a id='button_add_to_cart' data-theme='c' href='#page_cart?lcboid=" + lcboid + "&type=" + type + "' data-role='button' data-icon='plus'>Add to my list</a></div>";
+    var markup = "<div><a id='button_add_to_cart' data-theme='c' href='#page_cart?lcboid=" + lcboid + "&type=" + type + "' data-transition='slide' data-role='button' data-icon='plus'>Add to my list</a></div>";
     return markup;
 }
 
